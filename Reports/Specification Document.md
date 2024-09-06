@@ -30,6 +30,9 @@ Using the DSSP, the complexity is O(2^n) because as the dimensions of the grid i
 
 The spatial complexity of 2D arrays is O(n) for the number of squares, and the same applies to sets and lists.
 
+## **Inputs :**
+My project doesn't necessarily require any input apart from the dimensions and number of bombs that will be used to generate the grid.
+
 ## **References :**
 
 [https://dash.harvard.edu/handle/1/14398552](https://dash.harvard.edu/handle/1/14398552) (DSSP pseudo code and introduction to CSP)
