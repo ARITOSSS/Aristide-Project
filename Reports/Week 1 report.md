@@ -1,6 +1,6 @@
 # Weekly Report 1
 
-## **Choosing a project and understanding the issues at stake : **
+## **Choosing a project and understanding the issues at stake :**
 
 This week, I started by selecting my project from among the subjects on offer. Before making my choice, I took the time to thoroughly review the other project options to ensure that I was making the best decision aligned with my interests and skills. After careful consideration, I got in touch with a teacher to gain a better understanding of the expectations and challenges of the chosen project, which helped me to orientate myself more effectively. The discussions were invaluable in clarifying the objectives of the project and identifying the methodologies to be adopted.
 
@@ -8,11 +8,11 @@ This week, I started by selecting my project from among the subjects on offer. B
 
 I spent part of my time learning about the algorithms and methodologies needed for my project, in particular the DSSP (Double Set Single Point) and CSP (Constraint Satisfaction Problem) algorithms. Although I was already familiar with playing Minesweeper, I took the time to explore how the game functions from a more mathematical and algorithmic perspective. This deeper understanding is crucial as these algorithms will be essential for the implementation of my Minesweeper solver, and I have already started to draw up a plan for integrating them into the project.
 
-## **Exploring Graphical Interface Options : **
+## **Exploring Graphical Interface Options :**
 
 Having never created a GUI before, I've been researching the various libraries available for developing one efficiently. I explored options such as Tkinter, PyQt, and Kivy to choose the solution best suited to my needs. During my research, I also found several examples online that will help me implement an interface more easily, allowing me to save time and focus more on the algorithmic part of the project. This approach gave me a better understanding of the possibilities and constraints of each tool, setting a solid foundation for the next steps.
 
-## **Learning Test Methods in Python : **
+## **Learning Test Methods in Python :**
 
  I took the time to familiarise myself with testing practices in Python, by exploring frameworks such as unittest and pytest. The aim is to be able to integrate tests throughout development to guarantee the quality and reliability of the code.
 
