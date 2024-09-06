@@ -28,7 +28,7 @@ I plan to implement the Double Set Single Point (DSSP) algorithm, but as it is p
 
 Using the DSSP, the complexity is O(2^n) because as the dimensions of the grid increase, the resolution time increases exponentially.
 
-he spatial complexity of 2D arrays is O(n) for the number of squares, and the same applies to sets and lists.
+The spatial complexity of 2D arrays is O(n) for the number of squares, and the same applies to sets and lists.
 
 ## **References :**
 
