@@ -1,5 +1,8 @@
 # Weekly Report 1
 
+## **Time spent on the project :**
+5 Hours
+
 ## **Choosing a project and understanding the issues at stake :**
 
 This week, I started by selecting my project from among the subjects on offer. Before making my choice, I took the time to thoroughly review the other project options to ensure that I was making the best decision aligned with my interests and skills. After careful consideration, I got in touch with a teacher to gain a better understanding of the expectations and challenges of the chosen project, which helped me to orientate myself more effectively. The discussions were invaluable in clarifying the objectives of the project and identifying the methodologies to be adopted.
