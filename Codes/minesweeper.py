@@ -4,10 +4,25 @@ from tkinter import messagebox
 import random
 
 
-#Faire des vrais docs qui indique les paramètres et les retours de chaque fonction
-class MinesweeperSolver:
-    """Class to implement Minesweeper game with GUI and solver logic."""    
-    def __init__(self, rows, cols, num_bombs):
+class MinesweeperGame:
+    """
+    Class to implement Minesweeper game with GUI.
+
+    Attributes:
+        rows (int): Number of rows in the grid.
+        cols (int): Number of columns in the grid.
+        num_bombs (int): Number of bombs in the game.
+    """
+
+    def __init__(self, rows: int, cols: int, num_bombs: int):
+        """
+        Initialize the Minesweeper game with specified grid size and number of bombs.
+
+        Args:
+            rows (int): Number of rows in the grid.
+            cols (int): Number of columns in the grid.
+            num_bombs (int): Number of bombs in the game.
+        """
         self.grid_size = (rows, cols)
         self.num_bombs = num_bombs
         self.bomb_locations = []
@@ -34,18 +49,35 @@ class MinesweeperSolver:
                 self.buttons[(row, col)] = button
 
     def start_game(self):
-        """Start the game loop."""
+        """
+        Start the game loop.
+        
+        Returns:
+            None
+        """
         self.window.mainloop()
 
-    def process_event(self, cell):
-        """Handle left-click event on a cell."""
+    def process_event(self, cell: tuple):
+        """
+        Handle left-click event on a cell.
+
+        Args:
+            cell (tuple): The (row, col) position of the clicked cell.
+
+        Returns:
+            None
+        """
         if self.game_over or cell in self.revealed_cells:
             return
 
         if self.first_click is None:
             self.first_click = cell
-            self.bomb_locations = self.generate_bomb_locations(self.grid_size[0],
-            self.grid_size[1], self.num_bombs, self.first_click)
+            self.bomb_locations = self.generate_bomb_locations(
+                self.grid_size[0],
+                self.grid_size[1],
+                self.num_bombs,
+                self.first_click
+            )
             self.reveal_initial_safe_zone(cell)
 
         if cell in self.bomb_locations:
@@ -61,12 +93,25 @@ class MinesweeperSolver:
             messagebox.showinfo("Won", "Congratulations, you won!")
 
     def reveal_bombs(self):
-        """Reveal all bombs on the grid."""
+        """
+        Reveal all bombs on the grid.
+
+        Returns:
+            None
+        """
         for bomb in self.bomb_locations:
             self.buttons[bomb].config(text='B', bg='red')
 
-    def reveal_cell(self, cell):
-        """Reveal a cell and its adjacent cells if necessary."""
+    def reveal_cell(self, cell: tuple):
+        """
+        Reveal a cell and its adjacent cells if necessary.
+
+        Args:
+            cell (tuple): The (row, col) position of the cell to reveal.
+
+        Returns:
+            None
+        """
         if cell in self.revealed_cells or cell in self.flags:
             return
 
@@ -83,13 +128,29 @@ class MinesweeperSolver:
             for neighbor in self.get_neighbors(cell):
                 self.reveal_cell(neighbor)
 
-    def count_adjacent_bombs(self, cell):
-        """Count bombs in neighboring cells."""
+    def count_adjacent_bombs(self, cell: tuple) -> int:
+        """
+        Count bombs in neighboring cells.
+
+        Args:
+            cell (tuple): The (row, col) position of the cell.
+
+        Returns:
+            int: The number of bombs adjacent to the cell.
+        """
         neighbors = self.get_neighbors(cell)
         return sum(1 for neighbor in neighbors if neighbor in self.bomb_locations)
 
-    def get_neighbors(self, cell):
-        """Get valid neighboring cells for a given cell."""
+    def get_neighbors(self, cell: tuple) -> list:
+        """
+        Get valid neighboring cells for a given cell.
+
+        Args:
+            cell (tuple): The (row, col) position of the cell.
+
+        Returns:
+            list: A list of (row, col) tuples representing neighboring cells.
+        """
         row, col = cell
         rows, cols = self.grid_size
         neighbors = []
@@ -104,8 +165,16 @@ class MinesweeperSolver:
 
         return neighbors
 
-    def place_flag(self, cell):
-        """Place or remove a flag on a cell."""
+    def place_flag(self, cell: tuple):
+        """
+        Place or remove a flag on a cell.
+
+        Args:
+            cell (tuple): The (row, col) position of the cell.
+
+        Returns:
+            None
+        """
         if cell not in self.revealed_cells:
             if cell in self.flags:
                 self.flags.remove(cell)
@@ -114,13 +183,29 @@ class MinesweeperSolver:
                 self.flags.add(cell)
                 self.buttons[cell].config(text='F', bg='yellow')
 
-    def check_win(self):
-        """Check if the player has won the game."""
+    def check_win(self) -> bool:
+        """
+        Check if the player has won the game.
+
+        Returns:
+            bool: True if the player has won, False otherwise.
+        """
         total_cells = self.grid_size[0] * self.grid_size[1]
         return len(self.revealed_cells) == total_cells - len(self.bomb_locations)
 
-    def generate_bomb_locations(self, rows, cols, num_bombs, first_click):
-        """Generate bomb locations ensuring the first click is safe."""
+    def generate_bomb_locations(self, rows: int, cols: int, num_bombs: int, first_click: tuple) -> list:
+        """
+        Generate bomb locations ensuring the first click is safe.
+
+        Args:
+            rows (int): Number of rows in the grid.
+            cols (int): Number of columns in the grid.
+            num_bombs (int): Number of bombs to place.
+            first_click (tuple): The (row, col) position of the first clicked cell.
+
+        Returns:
+            list: A list of (row, col) tuples representing bomb locations.
+        """
         bomb_locations = set()
         safe_zone = set(self.get_neighbors(first_click) + [first_click])
 
@@ -131,8 +216,16 @@ class MinesweeperSolver:
 
         return list(bomb_locations)
 
-    def reveal_initial_safe_zone(self, cell):
-        """Reveal a zone around the first click to ensure at least 15% of the board is revealed."""
+    def reveal_initial_safe_zone(self, cell: tuple):
+        """
+        Reveal a zone around the first click to ensure at least 15% of the board is revealed.
+
+        Args:
+            cell (tuple): The (row, col) position of the first clicked cell.
+
+        Returns:
+            None
+        """
         self.reveal_cell(cell)
         neighbors = self.get_neighbors(cell)
         revealed_cells = 1  # Start with the first clicked cell
@@ -145,8 +238,22 @@ class MinesweeperSolver:
 
 
 def choose_difficulty():
-    """Display difficulty selection window."""
-    def set_difficulty(difficulty):
+    """
+    Display difficulty selection window.
+
+    Returns:
+        None
+    """
+    def set_difficulty(difficulty: str):
+        """
+        Set the game difficulty and start the Minesweeper game.
+
+        Args:
+            difficulty (str): The selected difficulty level ("Beginner", "Intermediate", "Advanced").
+
+        Returns:
+            None
+        """
         if difficulty == "Beginner":
             rows, cols, bombs = 8, 10, 10
         elif difficulty == "Intermediate":
@@ -157,8 +264,8 @@ def choose_difficulty():
             return
 
         difficulty_window.destroy()
-        solver = MinesweeperSolver(rows, cols, bombs)
-        solver.start_game()
+        game = MinesweeperGame(rows, cols, bombs)
+        game.start_game()
 
     difficulty_window = tk.Tk()
     difficulty_window.title("Select Difficulty")
