@@ -45,13 +45,29 @@ class TestMinesweeperGame(unittest.TestCase):
         """Test losing the game when clicking on a bomb."""
         self.solver.process_event((0, 1)) 
 
-        self.solver.bomb_locations = [(0, 0)]
+        self.solver.bomb_locations = [(7, 7)]
 
-        self.solver.process_event((0, 0))
+        self.solver.process_event((7, 7))
 
         self.assertTrue(self.solver.game_over)
         mock_showinfo.assert_called_once_with("Lost", "Bomb! You lost.")
 
+
+    @patch('tkinter.messagebox.showinfo')
+    def test_process_event_win(self, mock_showinfo):
+        """Test winning the game when all non-bomb cells are revealed."""
+        self.solver.process_event((0, 0))
+
+        self.solver.bomb_locations = [(4, 4), (3, 3), (2, 2)]
+        self.solver.revealed_cells = set()
+
+        for row in range(self.solver.grid_size[0]):
+            for col in range(self.solver.grid_size[1]):
+                if (row, col) not in self.solver.bomb_locations:
+                    self.solver.process_event((row, col))
+
+        self.assertTrue(self.solver.game_over)
+        mock_showinfo.assert_called_once_with("Won", "Congratulations, you won!")
 
     def test_check_win(self):
         """Test the check win condition."""
