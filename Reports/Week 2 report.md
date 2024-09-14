@@ -27,3 +27,5 @@ Additionally, structuring the code efficiently was difficult at first. My initia
 
 ## **What’s next ?**
 Now all I have to do is complete my test file to get the last few percent remaining for 100% coverage and then I can concentrate on the solver algorithm.
+
+First I'm going to find out how the algorithm works before trying to implement it.
