@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from minesweeper import MinesweeperGame
+from minesweeper import MinesweeperGame,choose_difficulty
 
 class TestMinesweeperGame(unittest.TestCase):
 
@@ -88,6 +88,62 @@ class TestMinesweeperGame(unittest.TestCase):
         self.solver.bomb_locations = [(1, 1), (2, 2)]
         count = self.solver.count_adjacent_bombs((1, 2))
         self.assertEqual(count, 2)
+
+    @patch('tkinter.Tk')
+    @patch('tkinter.Button')
+    @patch('minesweeper.MinesweeperGame')
+    def test_set_difficulty_beginner(self, MockMinesweeperGame, MockButton, MockTk):
+        """Test the 'Beginner' difficulty selection."""
+        # Mock the game object
+        mock_game = MagicMock()
+        MockMinesweeperGame.return_value = mock_game
+
+        # Mock Tkinter window
+        mock_window = MagicMock()
+        MockTk.return_value = mock_window
+
+        # Call choose_difficulty
+        choose_difficulty()
+
+        # Simulate button press for "Beginner"
+        MockButton.call_args_list[0][1]['command']()  # Trigger the first button's command
+
+        # Check if MinesweeperGame was initialized with the correct parameters
+        MockMinesweeperGame.assert_called_with(8, 10, 10)
+
+    @patch('tkinter.Tk')
+    @patch('tkinter.Button')
+    @patch('minesweeper.MinesweeperGame')
+    def test_set_difficulty_intermediate(self, MockMinesweeperGame, MockButton, MockTk):
+        """Test the 'Intermediate' difficulty selection."""
+        mock_game = MagicMock()
+        MockMinesweeperGame.return_value = mock_game
+
+        mock_window = MagicMock()
+        MockTk.return_value = mock_window
+
+        choose_difficulty()
+
+        MockButton.call_args_list[1][1]['command']()  # Trigger the second button's command
+
+        MockMinesweeperGame.assert_called_with(14, 18, 40)
+
+    @patch('tkinter.Tk')
+    @patch('tkinter.Button')
+    @patch('minesweeper.MinesweeperGame')
+    def test_set_difficulty_advanced(self, MockMinesweeperGame, MockButton, MockTk):
+        """Test the 'Advanced' difficulty selection."""
+        mock_game = MagicMock()
+        MockMinesweeperGame.return_value = mock_game
+
+        mock_window = MagicMock()
+        MockTk.return_value = mock_window
+
+        choose_difficulty()
+
+        MockButton.call_args_list[2][1]['command']()  # Trigger the third button's command
+
+        MockMinesweeperGame.assert_called_with(20, 30, 99)
 
 if __name__ == '__main__':
     unittest.main()

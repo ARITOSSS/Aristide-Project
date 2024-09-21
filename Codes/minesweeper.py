@@ -164,7 +164,7 @@ class MinesweeperGame:
                     neighbors.append(neighbor)
 
         return neighbors
-
+        
     def place_flag(self, cell: tuple):
         """
         Place or remove a flag on a cell.
