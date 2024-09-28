@@ -255,7 +255,7 @@ def choose_difficulty():
             None
         """
         if difficulty == "Beginner":
-            rows, cols, bombs = 8, 10, 10
+            rows, cols, bombs = 8, 8, 10
         elif difficulty == "Intermediate":
             rows, cols, bombs = 14, 18, 40
         elif difficulty == "Advanced":
