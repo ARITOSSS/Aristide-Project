@@ -141,10 +141,10 @@ class MinesweeperSolverNSSP:
 
 if __name__ == "__main__":
     # Create a game instance (e.g., beginner difficulty)
-    game_instance = MinesweeperGame(8, 8, 10)  # Renommage de 'game'
+    game_instance = MinesweeperGame(8, 8, 10) 
 
     # Start the solver
-    solver = MinesweeperSolverNSSP(game_instance)  # Utilisez 'game_instance'
+    solver = MinesweeperSolverNSSP(game_instance)                                                                    
 
     # Start the game and wait 2 seconds before the solver begins
     game_instance.window.after(2000, solver.first_click)
