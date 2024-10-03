@@ -1,6 +1,6 @@
 from minesweeper import MinesweeperGame
 from DSSP_solver import MinesweeperSolverDSSP
-from auto_solver import MinesweeperSolverNSP
+from NSP_solver import MinesweeperSolverNSP
 
 if __name__ == "__main__":
     DSSP = MinesweeperSolverDSSP(MinesweeperGame(8, 8, 10, gui=False))

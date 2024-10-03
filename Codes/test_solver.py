@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
-from auto_solver import MinesweeperSolverNSSP
+from Codes.NSP_solver import MinesweeperSolverNSSP
 from minesweeper import MinesweeperGame
 
 class TestMinesweeperSolverNSSP(unittest.TestCase):
