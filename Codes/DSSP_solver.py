@@ -1,7 +1,7 @@
 import random
 from minesweeper import MinesweeperGame  
 
-class MinesweeperSolverNSP:
+class MinesweeperSolverDSSP:
     """
     Minesweeper Solver using Naive Single Point (NSSP) algorithm.
     
@@ -19,6 +19,7 @@ class MinesweeperSolverNSP:
         """
         self.game = game
         self.s = set()  # Set for cells to probe
+        self.q = set()
 
     def is_all_marked_neighbors(self, cell):
         """
@@ -88,8 +89,37 @@ class MinesweeperSolverNSP:
                     if neighbor not in self.game.flags and neighbor not in new_flags:
                         new_flags.add(neighbor)
 
+            else :
+                self.q.add(cell)
+
         # Perform the actions determined by the analysis
         self.action(new_flags, new_safe_cells)
+
+        to_remove = set()
+        for cell in list(self.q):
+            neighbors = self.game.get_neighbors(cell)
+            unmarked_neighbors = [n for n in neighbors if n not in self.game.revealed_cells and n not in self.game.flags]
+            flagged_neighbors = [n for n in neighbors if n in self.game.flags]
+            adjacent_bombs = self.game.count_adjacent_bombs(cell)
+
+            if len(flagged_neighbors) == adjacent_bombs:
+                for neighbor in unmarked_neighbors:
+                    if neighbor not in new_safe_cells:
+                        new_safe_cells.add(neighbor)
+                        # Schedule removal
+                        to_remove.add(cell)
+
+            if len(unmarked_neighbors) == adjacent_bombs - len(flagged_neighbors):
+                for neighbor in unmarked_neighbors:
+                    if neighbor not in self.game.flags and neighbor not in new_flags:
+                        new_flags.add(neighbor)
+                        # Schedule removal
+                        to_remove.add(cell)
+
+        # After processing, remove scheduled cells
+        self.q.difference_update(to_remove)
+
+
 
         # If no new flags or safe cells, click a random unopened cell
         if not new_flags and not new_safe_cells and not self.s and not self.game.game_over:

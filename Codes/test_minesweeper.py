@@ -109,7 +109,7 @@ class TestMinesweeperGame(unittest.TestCase):
         MockButton.call_args_list[0][1]['command']()  # Trigger the first button's command
 
         # Check if MinesweeperGame was initialized with the correct parameters
-        MockMinesweeperGame.assert_called_with(8, 10, 10)
+        MockMinesweeperGame.assert_called_with(8, 8, 10)
 
     @patch('tkinter.Tk')
     @patch('tkinter.Button')
