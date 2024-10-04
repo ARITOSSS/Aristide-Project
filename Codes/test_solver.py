@@ -1,120 +1,57 @@
 import unittest
-from unittest.mock import MagicMock, patch
-from Codes.NSP_solver import MinesweeperSolverNSSP
+from unittest.mock import MagicMock
+from nsp_solver import MinesweeperSolverNSP
 from minesweeper import MinesweeperGame
 
-class TestMinesweeperSolverNSSP(unittest.TestCase):
+class TestMinesweeperSolverNSP(unittest.TestCase):
     def setUp(self):
-        """
-        Set up a basic Minesweeper game and solver for testing.
-        """
-        self.rows, self.cols, self.num_bombs = 8, 8, 10
-        self.game = MinesweeperGame(self.rows, self.cols, self.num_bombs)
-        self.solver = MinesweeperSolverNSSP(self.game)
+        """Set up a Minesweeper game instance for testing."""
+        self.game = MagicMock(spec=MinesweeperGame)
+        self.game.rows = 9
+        self.game.cols = 9
+        self.game.bomb_locations = {(1, 1), (2, 2)}  # Example bomb locations
+        self.game.revealed_cells = set()
+        self.game.flags = set()
+        self.game.count_adjacent_bombs.return_value = 2  # Example count of bombs around a cell
+        self.game.get_neighbors.return_value = [(0, 0), (0, 1), (1, 0), (1, 1), (2, 1)]  # Example neighbors
 
+        self.solver = MinesweeperSolverNSP(self.game)
 
-    @patch('auto_solver.MinesweeperSolverNSSP.step_solve')
-    def test_step_solve_called(self, mock_step_solve):
-        """
-        Test if step_solve is correctly called after first click.
-        """
-        self.solver.first_click = MagicMock()
-        self.solver.step_solve()
-
-        mock_step_solve.assert_called()
-
-    def test_first_click(self):
-        """
-        Test if the solver correctly makes the first click.
-        """
-        self.game.reveal_initial_safe_zone = MagicMock()
-        self.solver.first_click()
-
-        self.game.reveal_initial_safe_zone.assert_called_once()
-
-    def test_action(self):
-        """
-        Test the action() function for placing flags and revealing safe cells.
-        """
-        # Mock functions that modify the game's internal state
-        self.game.place_flag = MagicMock()
-        self.game.process_event = MagicMock()
-
-        new_flags = {(1, 1), (2, 2)}
-        new_safe_cells = {(3, 3), (4, 4)}
-
-        # Execute the action
-        self.solver.action(new_flags, new_safe_cells)
-
-        # Assert flags were placed
-        self.game.place_flag.assert_any_call((1, 1))
-        self.game.place_flag.assert_any_call((2, 2))
-
-        # Assert safe cells were explored
-        self.game.process_event.assert_any_call((3, 3))
-        self.game.process_event.assert_any_call((4, 4))
-
-
-
-    def test_no_action_possible(self):
-        """
-        Test if the solver correctly handles cases where no action is possible.
-        """
-        self.solver.first_click = MagicMock()
-        
-        # Run step_solve with no possible actions
-        self.solver.step_solve()
-
-        # Check that first_click was called
-        self.solver.first_click.assert_called_once()
-
-
-    def test_is_all_marked_neighbors_true(self):
-        # Simulate revealed and flagged neighbors
-        self.game.flags = {(0, 1), (1, 0), (1, 1)}  # Set some neighbors as flagged
-        self.solver.game.revealed_cells = {(0, 0)}  # Ensure the center cell is revealed
-        result = self.solver.is_all_marked_neighbors((0, 0))
-        self.assertTrue(result)
-
-    def test_is_all_marked_neighbors_false(self):
-        """
-        Test if is_all_marked_neighbors returns False when not all neighbors are flagged or revealed.
-        """
-        self.game.revealed_cells = {(2, 2)}
+    def test_select_corner_or_random(self):
+        """Test selecting a corner or a random cell."""
+        # Setup unrevealed and unflagged cells
+        self.game.revealed_cells = {(0, 0), (0, 1)}
         self.game.flags = {(1, 1)}
         
-        result = self.solver.is_all_marked_neighbors((2, 2))
-        self.assertFalse(result)
-
-    def test_action_places_flags_correctly(self):
-        """
-        Test if action places flags on the correct cells.
-        """
-        # Mock the game's place_flag method
-        self.game.place_flag = MagicMock()
-
-        new_flags = {(2, 2), (3, 3)}
-        self.solver.action(new_flags, set())
-
-        # Check that place_flag was called for each flag
-        self.game.place_flag.assert_any_call((2, 2))
-        self.game.place_flag.assert_any_call((3, 3))
-
-    def test_action_processes_safe_cells_correctly(self):
-        """
-        Test if action explores safe cells correctly.
-        """
-        # Mock the game's process_event method
+        # Select a corner or random cell
+        selected_cell = self.solver.select_corner_or_random()
+        self.assertIn(selected_cell, [(0, 0), (0, self.game.cols - 1),
+                                       (self.game.rows - 1, 0), (self.game.rows - 1, self.game.cols - 1), (1, 0), (1, 1)])
+        
+    def test_step_solve(self):
+        """Test the step_solve functionality."""
+        self.solver.s = {(0, 0)}  # Set the initial cell to probe
         self.game.process_event = MagicMock()
+        
+        result = self.solver.step_solve()
+        
+        # Check if the process_event was called
+        self.game.process_event.assert_called_once_with((0, 0))
+        
+        # Check if the method returns "Failure" when hitting a bomb
+        self.game.process_event.return_value = True  # Simulate that we hit a bomb
+        self.assertEqual(self.solver.step_solve(), "Failure")
 
-        new_safe_cells = {(2, 2), (3, 3)}
-        self.solver.action(set(), new_safe_cells)
+    def test_run_games(self):
+        """Test the run_games method for multiple game runs."""
+        self.solver.step_solve = MagicMock()  # Mock the step_solve method
+        self.solver.game.check_win.return_value = True  # Mock winning condition
 
-        # Check that process_event was called for each safe cell
-        self.game.process_event.assert_any_call((2, 2))
-        self.game.process_event.assert_any_call((3, 3))
+        wins_percentage = self.solver.run_games(10)  # Run 10 games
+        self.assertEqual(wins_percentage, 100.0)  # All games won
 
+        # Check that step_solve was called 10 times
+        self.assertEqual(self.solver.step_solve.call_count, 10)
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
