@@ -21,8 +21,8 @@ The solver works by simulating a Minesweeper game, probing cells, and marking po
 - Required libraries:
   ```bash
   pip install random 
-  pip install pylint
-
+  ```bash
+  pip install pylint 
 ## **Installation :**
 1. Clone the repository :
   ```bash

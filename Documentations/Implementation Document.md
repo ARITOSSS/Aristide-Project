@@ -112,8 +112,12 @@ ChatGPT and DeepL are the only external tools I have used for various reasons:
 
 
 ## **References :**
-https://dash.harvard.edu/handle/1/14398552\n
+https://dash.harvard.edu/handle/1/14398552
+
 https://docs.python.org/3/library/tkinter.html
+
 https://gamedevacademy.org/pylint-tutorial-complete-guide/
+
 https://www.pythontutorial.net/python-unit-testing/python-unittest-coverage/
+
 https://caml.inria.fr/pub/docs/oreilly-book/html/book-ora059.html#:~:text=At%20the%20beginning%20of%20the,up%20and%20the%20player%20loses.
