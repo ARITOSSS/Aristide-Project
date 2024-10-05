@@ -33,10 +33,11 @@ The solver works by simulating a Minesweeper game, probing cells, and marking po
   cd .\Codes
 
 ## **Commands** :
-1. Pylint :
+- Pylint
   ```bash
   pylint .\name_of_the_file.py
-2. Unittest :
+
+- Unittest
   ```bash
   python -m coverage run -m unittest
   coverage report -m
