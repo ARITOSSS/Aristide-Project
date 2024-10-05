@@ -162,7 +162,7 @@ class MinesweeperSolverDSSP:
         return wins / num_games * 100
 if __name__ == "__main__":
     # Create a game instance (e.g., beginner difficulty)
-    game = MinesweeperGame(9, 9, 10)
+    game = MinesweeperGame(16, 30, 99)
 
     # Start the solver
     solver = MinesweeperSolverDSSP(game)
