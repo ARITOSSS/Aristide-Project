@@ -24,12 +24,13 @@ The solver works by simulating a Minesweeper game, probing cells, and marking po
 
   
 ## **Installation :**
-1. Clone the repository :
+- Clone the repisotory
   ```bash
-  git clone https://github.com/ARITOSSS/aristide-project.git
-2. Open it in your IDE :
+  git clone https://github.com/ARITOSSS/Aristide-Project.git
+
+- Open it in your IDE and
   ```bash
-  cd .\Codes\
+  cd .\Codes
 
 ## **Commands** :
 1. Pylint :
