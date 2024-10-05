@@ -40,4 +40,7 @@ The solver works by simulating a Minesweeper game, probing cells, and marking po
 - Unittest
   ```bash
   python -m coverage run -m unittest
+
+- Coverage
+  ```bash
   coverage report -m
