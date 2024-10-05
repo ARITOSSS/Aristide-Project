@@ -111,8 +111,8 @@ ChatGPT and DeepL are the only external tools I have used for various reasons:
 - Otherwise I use ChatGpt when I'm having trouble understanding something I don't know, such as the use of graphical interfaces, pylint, unittest or even certain errors. Beyond that, I avoid using code generated via ChatGpt because I have the impression that it more often ends up causing problems than anything else, but I draw inspiration from it.
 
 
-## **References : **
-https://dash.harvard.edu/handle/1/14398552
+## **References :**
+https://dash.harvard.edu/handle/1/14398552\n
 https://docs.python.org/3/library/tkinter.html
 https://gamedevacademy.org/pylint-tutorial-complete-guide/
 https://www.pythontutorial.net/python-unit-testing/python-unittest-coverage/
