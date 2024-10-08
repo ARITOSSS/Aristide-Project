@@ -27,9 +27,10 @@ class MinesweeperSolverDSSP:
             game (MinesweeperGame): Instance of the Minesweeper game.
         """
         self.game = game
-        self.opener = self.select_corner_or_random()
+        self.opener = (self.select_corner_or_random())
         self.s = {self.opener}
         self.q = set()
+
 
     def select_corner_or_random(self):
         """
@@ -39,7 +40,7 @@ class MinesweeperSolverDSSP:
         Returns:
             tuple: The selected cell (row, col) or None if no valid cell exists.
         """
-        # Array containing the four corners of the game
+
         corners = [
             (0, 0),
             (0, self.game.cols - 1),
@@ -105,10 +106,14 @@ class MinesweeperSolverDSSP:
 
         return count_flagged + len(unmarked_neighbors) == bombs
 
-    def step_solve(self):
+    def step_solve(self, max_steps=None):
         """
         Solve the Minesweeper game with the sets s (certain cells) and q (potential mines).
-        Using Double Set Single Point Algorithm
+        Using Double Set Single Point Algorithm.
+        
+        Args:
+            max_steps (int, optional): Maximum number of steps to execute. If None, the solver 
+                                    runs until the game is over.
         """
         index = 0
         while not self.game.game_over:
@@ -116,81 +121,71 @@ class MinesweeperSolverDSSP:
             if self.game.gui == True :
                 print(f"Step {index}")
 
-            # If set s is empty, select another cell
+            if max_steps and index > max_steps:
+                break
+
             if not self.s:
                 x = self.select_corner_or_random()
                 if x is not None:
                     self.s.add(x)
 
-            # Process certain cells in set s
             if self.game.gui == True :
                 print(" Set s : ",self.s)
             while self.s:
                 x = self.s.pop()
                 self.game.process_event(x)
-                if self.game.gui == True :
+                if self.game.gui == True:
                     time.sleep(0.2)
                     self.game.window.update()
 
-                if x in self.game.bomb_locations:
-                    return "Failure"  # The cell clicked was a bomb
-
-                # Gather information about the neighbors of the revealed cell
                 neighbors = self.game.get_neighbors(x)
                 unmarked_neighbors = [
                     n for n in neighbors
                     if n not in self.game.flags and n not in self.game.revealed_cells
                 ]
 
-                # If all neighboring bombs are flagged, add unmarked neighbors to set s
                 if self.is_all_free_neighbor(x):
                     self.s.update(unmarked_neighbors)
                 else:
-                    self.q.add(x)# Add the cell to the uncertain set q
+                    self.q.add(x)
 
-            # List to avoid errors when removing elements from set q
             to_remove_from_q = []
-            if self.game.gui == True :
-                print( " Set q : ",self.q)
-            # Iterate over a copy of q to prevent modification errors
+            if self.game.gui == True:
+                print(" Set q : ",self.q)
             for q in list(self.q):
                 neighbors = self.game.get_neighbors(q)
                 unmarked_neighbors = [
                     n for n in neighbors
                     if n not in self.game.flags and n not in self.game.revealed_cells
                 ]
-                # If the number of flagged neighbors plus unmarked neighbors equals bombs,
-                # place flags
                 if self.is_all_marked_neighbor(q):
                     for y in unmarked_neighbors:
                         if y not in self.game.flags:
                             self.game.place_flag(y)
-                    to_remove_from_q.append(q)  # Mark q for removal
+                    to_remove_from_q.append(q)
 
-            # Remove marked elements from set q
             for q in to_remove_from_q:
-                self.q.discard(q)  # Use discard to avoid KeyError
+                self.q.discard(q)
 
-            # Check remaining elements in set q for further deductions
             for q in list(self.q):
                 neighbors = self.game.get_neighbors(q)
                 unmarked_neighbors = [
                     n for n in neighbors
                     if n not in self.game.flags and n not in self.game.revealed_cells
                 ]
-                # If all bombs are flagged, add unmarked neighbors to set s
                 if self.is_all_free_neighbor(q):
                     self.s.update(unmarked_neighbors)
-                    self.q.discard(q)  # Remove from uncertain set
-    
-            if self.game.gui == True :
+                    self.q.discard(q)
+
+            if self.game.gui == True:
                 time.sleep(1.5)
                 self.game.window.update()
                 print("-----------------------")
 
 
 
-    def run_games(self, num_games: int):
+
+    def run_games(self, num_games: int , rows: int, cols: int, num_bombs: int):
         """
         Run multiple games and return the percentage of wins.
 
@@ -201,16 +196,20 @@ class MinesweeperSolverDSSP:
             float: Percentage of games won.
         """
         wins = 0
+        iterations = 0
         for _ in range(num_games):
-            game_instance = MinesweeperGame(9, 9, 10, gui=False)
+            game_instance = MinesweeperGame(rows, cols, num_bombs, gui=False)
             self.game = game_instance
-            self.step_solve()
-            if self.game.check_win():
-                wins += 1
-        return wins / num_games * 100
+            if self.opener not in self.game.bomb_locations:
+                iterations += 1
+                self.step_solve()
+                if self.game.check_win():
+                    wins += 1
+        return wins / iterations * 100
+    
 if __name__ == "__main__":
     # Create a game instance (e.g., beginner difficulty)
-    game = MinesweeperGame(9, 9, 10)
+    game = MinesweeperGame(16, 16, 40)
 
 
 

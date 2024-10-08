@@ -64,6 +64,29 @@ class TestMinesweeperSolverDSSP(unittest.TestCase):
         print(solver.s)
 
         self.assertTrue(game.check_win())
+    
+    def test_step_solve_limited_steps(self):
+            """
+            Test if the solver correctly handles an empty set 's' during execution by limiting steps.
+            Covers lines 121-123, 127.
+            """
+            # Crée une nouvelle partie pour ce test
+            game = MinesweeperGame(5, 5, 4, gui=True)
+            game.bomb_locations = {(2, 3)}
+
+            # Instancier un solver DSSP pour cette partie
+            solver = MinesweeperSolverDSSP(game)
+
+            # Vider l'ensemble 's' pour simuler une situation intermédiaire
+            solver.s.clear()
+
+            # Limiter le nombre de pas dans step_solve à 3 pour simuler une interruption
+            solver.step_solve(max_steps=1)
+
+            # Vérifier que l'ensemble 's' n'est plus vide après sélection d'une nouvelle cellule
+            self.assertNotEqual(len(solver.s), 0, "The set 's' should not be empty after selecting a new cell in mid-execution.")
+
+
 
 
 
