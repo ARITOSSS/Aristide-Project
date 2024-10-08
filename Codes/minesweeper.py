@@ -75,9 +75,6 @@ class MinesweeperGame:
         Args:
             cell (tuple): The (row, column) coordinates of the cell clicked.
         """
-        if self.game_over or cell in self.revealed_cells:
-            return
-
         if cell in self.bomb_locations:
             self.game_over = True
             if self.gui:

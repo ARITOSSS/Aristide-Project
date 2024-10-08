@@ -1,6 +1,4 @@
 import unittest
-from unittest.mock import patch, MagicMock
-import tkinter as tk
 from minesweeper import MinesweeperGame
 
 class TestMinesweeperGame(unittest.TestCase):

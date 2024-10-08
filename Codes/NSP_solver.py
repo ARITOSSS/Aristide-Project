@@ -4,6 +4,7 @@ Naive Single Point (NSP) algorithm.
 """
 
 import random
+import time
 from minesweeper import MinesweeperGame
 
 class MinesweeperSolverNSP:
@@ -58,49 +59,49 @@ class MinesweeperSolverNSP:
         Perform a step of solving the Minesweeper game.
         Using Naive Single Point Algorithm
         """
-        # If set s is empty, select another cell
-        if not self.s:
-            x = self.select_corner_or_random()
-            self.s.add(x)
+        while not self.game.game_over:
+            # If set s is empty, select another cell
+            if not self.s:
+                x = self.select_corner_or_random()
+                self.s.add(x)
 
-        new_cells = set()  # To track newly discovered cells
-        for x in list(self.s):
-            self.game.process_event(x)  # Process the current cell
+            new_cells = set()  # To track newly discovered cells
+            for x in list(self.s):
+                self.game.process_event(x)  # Process the current cell
 
-            if x in self.game.bomb_locations:
-                return "Failure"  # The cell clicked was a bomb
+                if x in self.game.bomb_locations:
+                    return "Failure"  # The cell clicked was a bomb
 
-            # Gather information about the neighbors of the revealed cell
-            neighbors = self.game.get_neighbors(x)
-            unmarked_neighbors = [
-                n for n in neighbors
-                if n not in self.game.flags and n not in self.game.revealed_cells
-            ]
-            bombs = self.game.count_adjacent_bombs(x)
-            flagged_neighbors = [n for n in neighbors if n in self.game.flags]
-            count_flagged = len(flagged_neighbors)
+                # Gather information about the neighbors of the revealed cell
+                neighbors = self.game.get_neighbors(x)
+                unmarked_neighbors = [
+                    n for n in neighbors
+                    if n not in self.game.flags and n not in self.game.revealed_cells
+                ]
+                bombs = self.game.count_adjacent_bombs(x)
+                flagged_neighbors = [n for n in neighbors if n in self.game.flags]
+                count_flagged = len(flagged_neighbors)
 
-            # If the number of bombs matches the number of flagged neighbors,
-            # add unmarked neighbors to set s
-            if bombs == count_flagged:
-                self.s.update(unmarked_neighbors)
-                new_cells.update(unmarked_neighbors)  # Track new cells discovered
+                # If the number of bombs matches the number of flagged neighbors,
+                # add unmarked neighbors to set s
+                if bombs == count_flagged:
+                    self.s.update(unmarked_neighbors)
+                    new_cells.update(unmarked_neighbors)  # Track new cells discovered
 
-            # If the count of flagged neighbors and unmarked neighbors equals bombs,
-            # place flags on unmarked neighbors
-            if count_flagged + len(unmarked_neighbors) == bombs:
-                for y in unmarked_neighbors:
-                    if y not in self.game.flags:
-                        self.game.place_flag(y)
+                # If the count of flagged neighbors and unmarked neighbors equals bombs,
+                # place flags on unmarked neighbors
+                if count_flagged + len(unmarked_neighbors) == bombs:
+                    for y in unmarked_neighbors:
+                        if y not in self.game.flags:
+                            self.game.place_flag(y)
+            time.sleep(1)
+            self.game.window.update()
 
-        # Schedule the next step if the game is not over and new cells were found
-        if not self.game.game_over and new_cells:
-            self.step_solve()
-        else:
-            # If no new cells, select a random cell and continue solving
-            x = self.select_corner_or_random()
-            self.s.add(x)
-            self.step_solve()
+            # Schedule the next step if the game is not over and new cells were found
+            if not new_cells:
+                x = self.select_corner_or_random()
+                self.s.add(x)
+
 
     def run_games(self, num_games: int):
         """
@@ -121,3 +122,13 @@ class MinesweeperSolverNSP:
                 wins += 1  # Increment win count if the game is won
         return wins / num_games * 100  # Calculate and return the win percentage
 
+if __name__ == "__main__":
+    # Create a game instance (e.g., beginner difficulty)
+    game = MinesweeperGame(9, 9, 10)
+
+    # Start the solver
+    solver = MinesweeperSolverNSP(game)
+
+    # Start the game and wait 2 seconds before the solver starts
+    game.window.after(2000, solver.step_solve)
+    game.start_game()
