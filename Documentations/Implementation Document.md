@@ -1,13 +1,11 @@
 # Specification Document
 
 ## **General Structure of the Program :**
-The Minesweeper program is split into three main components:
+The Minesweeper program is split into two main components:
 
 ### **Minesweeper Game Logic :**
 
-This module implements the core game logic of Minesweeper, including grid setup, bomb placement, user interactions, and game state management.
-It is structured using an object-oriented approach in the class MinesweeperGame, which encapsulates all attributes related to the game's state (grid size, bomb locations, revealed cells, etc.) and methods to handle events (such as revealing a cell or placing a flag).
-The game is designed to support both a graphical user interface (GUI) using Tkinter and a non-GUI version for testing purposes.
+This module implements the core game logic of Minesweeper, including grid setup, bomb placement, user interactions, and game state management. It is structured using an object-oriented approach in the class [MinesweeperGame](https://github.com/ARITOSSS/Aristide-Project/blob/main/Codes/minesweeper.py), which encapsulates all attributes related to the game's state (grid size, bomb locations, revealed cells, etc.) and methods to handle events (such as revealing a cell or placing a flag). The game is designed to support both a graphical user interface (GUI) using Tkinter and a non-GUI version for testing purposes.
 
 ### **Naive Single Point (NSP) Solver :**
 
