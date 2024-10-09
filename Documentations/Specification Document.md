@@ -26,12 +26,16 @@ I plan to implement the Double Set Single Point (DSSP) algorithm, but as it is p
 
 ## **Complexities :**
 
-Using the DSSP, the complexity is O(2^n) because as the dimensions of the grid increase, the resolution time increases exponentially.
+Using the DSSP, the complexity is O(n^2).
 
 The spatial complexity of 2D arrays is O(n) for the number of squares, and the same applies to sets and lists.
 
 ## **Inputs :**
-My project doesn't necessarily require any input apart from the dimensions and number of bombs that will be used to generate the grid.
+
+The project requires the following inputs:
+- `rows`: The number of rows in the game grid.
+- `cols`: The number of columns in the game grid.
+- `num_bombs`: The total number of bombs to be placed in the grid.
 
 ## **References :**
 
