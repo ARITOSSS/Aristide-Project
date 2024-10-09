@@ -4,7 +4,7 @@ including the game setup, processing user inputs, and managing game state.
 """
 
 import random
-import tkinter as tk  # For the graphical user interface
+import tkinter as tk  # Importing tkinter for creating the graphical user interface
 from tkinter import messagebox
 
 class MinesweeperGame:
@@ -25,6 +25,15 @@ class MinesweeperGame:
     """
 
     def __init__(self, rows: int, cols: int, num_bombs: int, gui: bool = True):
+        """
+        Initialize the Minesweeper game with the given parameters.
+
+        Args:
+            rows (int): Number of rows in the grid.
+            cols (int): Number of columns in the grid.
+            num_bombs (int): Number of bombs in the game.
+            gui (bool): If True, the GUI will be enabled.
+        """
         self.grid_size = (rows, cols)
         self.num_bombs = num_bombs
         self.bomb_locations = self.generate_bomb_locations(rows, cols, num_bombs)
@@ -36,9 +45,9 @@ class MinesweeperGame:
         self.cols = cols
         self.rows = rows
         if self.gui:
-            self.window = tk.Tk()
-            self.window.title("Minesweeper")
-            self.setup_gui(rows, cols)
+            self.window = tk.Tk()  # Create a new Tkinter window
+            self.window.title("Minesweeper")  # Set the title of the window
+            self.setup_gui(rows, cols)  # Set up the GUI
 
     def setup_gui(self, rows, cols):
         """
@@ -50,23 +59,25 @@ class MinesweeperGame:
         """
         for row in range(rows):
             for col in range(cols):
+                # Create a button for each cell, linked to the process_event method
                 button = tk.Button(
                     self.window, width=2, height=1,
                     command=lambda r=row, c=col: self.process_event((r, c))
                 )
+                # Bind right-click to place a flag on the cell
                 button.bind(
                     '<Button-3>',
                     lambda event, r=row, c=col: self.place_flag((r, c))
                 )
-                button.grid(row=row, column=col)
-                self.buttons[(row, col)] = button
+                button.grid(row=row, column=col)  # Place button in the grid
+                self.buttons[(row, col)] = button  # Map coordinates to button
 
     def start_game(self):
         """
         Start the game and enter the GUI main loop.
         """
         if self.gui:
-            self.window.mainloop()
+            self.window.mainloop()  # Start the Tkinter event loop
 
     def process_event(self, cell: tuple):
         """
@@ -78,24 +89,23 @@ class MinesweeperGame:
         if cell in self.bomb_locations:
             self.game_over = True
             if self.gui:
-                self.reveal_bombs()
-                messagebox.showinfo("Lost", "Bomb! You lost.")
+                self.reveal_bombs()  # Reveal all bombs
+                messagebox.showinfo("Lost", "Bomb! You lost.")  # Show message box
             return
-
         self.reveal_cell(cell)
 
         if self.check_win():
             self.game_over = True
             if self.gui:
-                messagebox.showinfo("Won", "Congratulations, you won!")
+                messagebox.showinfo("Won", "Congratulations, you won!")  # Show win message
 
     def reveal_bombs(self):
         """
         Reveal all bomb locations when the game is over.
         """
-        for bomb in self.bomb_locations:
+        for bomb in self.bomb_locations:  # Loop through all bomb locations
             if self.gui:
-                self.buttons[bomb].config(text='B', bg='red')
+                self.buttons[bomb].config(text='B', bg='red')  # Change button to show bomb
 
     def reveal_cell(self, cell: tuple):
         """
@@ -107,14 +117,14 @@ class MinesweeperGame:
         if cell in self.revealed_cells or cell in self.flags:
             return
 
-        self.revealed_cells.add(cell)
-        adjacent_bombs = self.count_adjacent_bombs(cell)
-        button = self.buttons[cell] if self.gui else None
+        self.revealed_cells.add(cell)  # Add cell to revealed cells
+        adjacent_bombs = self.count_adjacent_bombs(cell)  # Count adjacent bombs
+        button = self.buttons[cell] if self.gui else None  # Get button reference if GUI is enabled
         if button:
             button.config(
-                text=str(adjacent_bombs) if adjacent_bombs > 0 else '',
-                state=tk.DISABLED,
-                bg='light grey'
+                text=str(adjacent_bombs) if adjacent_bombs > 0 else '',  # Show bomb count or empty
+                state=tk.DISABLED,  # Disable button to prevent further clicks
+                bg='light grey'  # Change background color
             )
 
     def count_adjacent_bombs(self, cell: tuple) -> int:
@@ -127,8 +137,8 @@ class MinesweeperGame:
         Returns:
             int: The number of bombs adjacent to the cell.
         """
-        neighbors = self.get_neighbors(cell)
-        return sum(1 for neighbor in neighbors if neighbor in self.bomb_locations)
+        neighbors = self.get_neighbors(cell)  # Get neighboring cells
+        return sum(1 for neighbor in neighbors if neighbor in self.bomb_locations)  # Count bombs
 
     def get_neighbors(self, cell: tuple) -> list:
         """
@@ -140,17 +150,20 @@ class MinesweeperGame:
         Returns:
             list: List of neighboring cell coordinates.
         """
+        # Extract the row and column from the cell
         row, col = cell
-        rows, cols = self.grid_size
-        neighbors = []
-        for dr in [-1, 0, 1]:
-            for dc in [-1, 0, 1]:
-                if dr == 0 and dc == 0:
+        rows, cols = self.grid_size  # Get total rows and columns
+        neighbors = []  # Initialize list for neighbors
+        # Loop through possible neighbor offsets
+        for dr in [-1, 0, 1]:  # Row offsets (-1, 0, 1)
+            for dc in [-1, 0, 1]:  # Column offsets (-1, 0, 1)
+                if dr == 0 and dc == 0:  # Skip the current cell
                     continue
-                neighbor = (row + dr, col + dc)
+                neighbor = (row + dr, col + dc)  # Calculate neighbor coordinates
+                # Check if the neighbor is within bounds
                 if 0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols:
-                    neighbors.append(neighbor)
-        return neighbors
+                    neighbors.append(neighbor)  # Add valid neighbor to the list
+        return neighbors  # Return the list of neighboring cells
 
     def place_flag(self, cell: tuple):
         """
@@ -159,13 +172,13 @@ class MinesweeperGame:
         Args:
             cell (tuple): The (row, column) coordinates of the cell.
         """
-        if cell not in self.revealed_cells:
-            if cell in self.flags:
-                self.flags.remove(cell)
+        if cell not in self.revealed_cells:  # Only place a flag on unrevealed cells
+            if cell in self.flags:  # If the cell is already flagged
+                self.flags.remove(cell)  # Remove the flag
                 if self.gui:
                     self.buttons[cell].config(text='', bg='SystemButtonFace')
-            else:
-                self.flags.add(cell)
+            else:  # If the cell is not flagged
+                self.flags.add(cell)  # Add the flag
                 if self.gui:
                     self.buttons[cell].config(text='F', bg='yellow')
 
@@ -178,6 +191,7 @@ class MinesweeperGame:
         """
         total_cells = self.grid_size[0] * self.grid_size[1]
         return len(self.revealed_cells) == total_cells - len(self.bomb_locations)
+
 
     def generate_bomb_locations(self, rows: int, cols: int, num_bombs: int):
         """

@@ -27,12 +27,13 @@ class MinesweeperSolverDSSP:
             game (MinesweeperGame): Instance of the Minesweeper game.
         """
         self.game = game
-        self.opener = (self.select_corner_or_random())
-        self.s = {self.opener}
+        self.opener = self.select_random()
+        self.s = set()
         self.q = set()
 
 
-    def select_corner_or_random(self):
+
+    def select_random(self):
         """
         Select a corner cell if available; otherwise, select a random unrevealed 
         and unflagged cell.
@@ -41,19 +42,6 @@ class MinesweeperSolverDSSP:
             tuple: The selected cell (row, col) or None if no valid cell exists.
         """
 
-        corners = [
-            (0, 0),
-            (0, self.game.cols - 1),
-            (self.game.rows - 1, 0),
-            (self.game.rows - 1, self.game.cols - 1)
-        ]
-
-        # Return the first valid corner cell found
-        for corner in corners:
-            if corner not in self.game.revealed_cells and corner not in self.game.flags:
-                return corner
-
-        # If no free corner exists, select a random unrevealed cell
         unrevealed_cells = [
             (r, c) for r in range(self.game.rows)
             for c in range(self.game.cols)
@@ -77,8 +65,7 @@ class MinesweeperSolverDSSP:
         neighbors = self.game.get_neighbors(cell)
         bombs = self.game.count_adjacent_bombs(cell)
         flagged_neighbors = [n for n in neighbors if n in self.game.flags]
-        count_flagged = len(flagged_neighbors)       
-
+        count_flagged = len(flagged_neighbors)
         return count_flagged == bombs
 
     def is_all_marked_neighbor(self, cell):
@@ -115,29 +102,25 @@ class MinesweeperSolverDSSP:
             max_steps (int, optional): Maximum number of steps to execute. If None, the solver 
                                     runs until the game is over.
         """
-        index = 0
+        self.s.add(self.opener)
+        time.sleep(2)
+        iterations = 0
         while not self.game.game_over:
-            index += 1
-            if self.game.gui == True :
-                print(f"Step {index}")
-
-            if max_steps and index > max_steps:
-                break
-
             if not self.s:
-                x = self.select_corner_or_random()
+                x = self.select_random()
                 if x is not None:
                     self.s.add(x)
 
-            if self.game.gui == True :
-                print(" Set s : ",self.s)
+            if max_steps is not None and max_steps == 0:
+                break
+
+            if self.game.gui is True:
+                iterations +=1
+                print("Iteration: ", iterations)
+                print("Set s: ", self.s)
             while self.s:
                 x = self.s.pop()
                 self.game.process_event(x)
-                if self.game.gui == True:
-                    time.sleep(0.2)
-                    self.game.window.update()
-
                 neighbors = self.game.get_neighbors(x)
                 unmarked_neighbors = [
                     n for n in neighbors
@@ -145,45 +128,37 @@ class MinesweeperSolverDSSP:
                 ]
 
                 if self.is_all_free_neighbor(x):
-                    self.s.update(unmarked_neighbors)
+                    for y in unmarked_neighbors:
+                        self.s.add(y)
                 else:
                     self.q.add(x)
 
-            to_remove_from_q = []
-            if self.game.gui == True:
-                print(" Set q : ",self.q)
-            for q in list(self.q):
-                neighbors = self.game.get_neighbors(q)
+            if self.game.gui is True:
+                print("Set q: ", self.q)
+            for cell in list(self.q):
+                neighbors = self.game.get_neighbors(cell)
                 unmarked_neighbors = [
                     n for n in neighbors
                     if n not in self.game.flags and n not in self.game.revealed_cells
                 ]
-                if self.is_all_marked_neighbor(q):
+                if self.is_all_marked_neighbor(cell):
                     for y in unmarked_neighbors:
-                        if y not in self.game.flags:
-                            self.game.place_flag(y)
-                    to_remove_from_q.append(q)
+                        self.game.place_flag(y)
+                    self.q.discard(cell)
 
-            for q in to_remove_from_q:
-                self.q.discard(q)
-
-            for q in list(self.q):
-                neighbors = self.game.get_neighbors(q)
+            for cell in list(self.q):
+                neighbors = self.game.get_neighbors(cell)
                 unmarked_neighbors = [
                     n for n in neighbors
                     if n not in self.game.flags and n not in self.game.revealed_cells
                 ]
-                if self.is_all_free_neighbor(q):
-                    self.s.update(unmarked_neighbors)
-                    self.q.discard(q)
-
-            if self.game.gui == True:
-                time.sleep(1.5)
+                if self.is_all_free_neighbor(cell):
+                    for y in unmarked_neighbors:
+                        self.s.add(y)
+                    self.q.discard(cell)
+            if self.game.gui is True:
+                time.sleep(2)
                 self.game.window.update()
-                print("-----------------------")
-
-
-
 
     def run_games(self, num_games: int , rows: int, cols: int, num_bombs: int):
         """
@@ -200,23 +175,9 @@ class MinesweeperSolverDSSP:
         for _ in range(num_games):
             game_instance = MinesweeperGame(rows, cols, num_bombs, gui=False)
             self.game = game_instance
-            if self.opener not in self.game.bomb_locations:
+            if self.opener not in self.game.bomb_locations :
                 iterations += 1
                 self.step_solve()
                 if self.game.check_win():
                     wins += 1
         return wins / iterations * 100
-    
-if __name__ == "__main__":
-    # Create a game instance (e.g., beginner difficulty)
-    game = MinesweeperGame(16, 16, 40)
-
-
-
-    # Start the solver
-    solver = MinesweeperSolverDSSP(game)
-    
-    # Start the game and wait 2 seconds before the solver starts
-    game.window.after(2000, solver.step_solve)
-    game.start_game()
-
