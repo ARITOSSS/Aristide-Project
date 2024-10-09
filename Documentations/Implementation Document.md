@@ -5,18 +5,11 @@ The Minesweeper program is split into two main components:
 
 ### **Minesweeper Game Logic :**
 
-This module implements the core game logic of Minesweeper, including grid setup, bomb placement, user interactions, and game state management. It is structured using an object-oriented approach in the class [MinesweeperGame](https://github.com/ARITOSSS/Aristide-Project/blob/main/Codes/minesweeper.py), which encapsulates all attributes related to the game's state (grid size, bomb locations, revealed cells, etc.) and methods to handle events (such as revealing a cell or placing a flag). The game is designed to support both a graphical user interface (GUI) using Tkinter and a non-GUI version for testing purposes.
-
-### **Naive Single Point (NSP) Solver :**
-
-This solver implements a simple approach to solving Minesweeper by processing individual cells one at a time.
-It iterates over the grid, probing cells, flagging bombs, and attempting to deduce safe cells based on the number of adjacent bombs.
-The core operations include selecting random unexplored cells and using basic rules (isAFN/isAMN) to mark cells as safe or to place flags.
+This module implements the core game logic of Minesweeper, including grid setup, bomb placement, user interactions, and game state management. It is structured using an object-oriented approach in the class [MinesweeperGame](https://github.com/ARITOSSS/Aristide-Project/blob/main/Codes/minesweeper.py), which encapsulates all attributes related to the game's state (grid size, bomb locations, revealed cells, etc.) and methods to handle events (such as revealing a cell or placing a flag). The game is designed to support both a graphical user interface (GUI) using Tkinter and a non-GUI version for testing purposes. It is important to note that this implementation of the deminer is designed to be solved by a solver and not by a human user.
 
 ### **Double Set Single Point (DSSP) Solver :**
 
-A more advanced solver that leverages two sets: S (certain cells) and Q (uncertain cells).
-It performs a similar function to the NSP solver but with enhanced logic for handling uncertain cells, allowing more advanced deductions and flag placements.
+The [DSSP Solver](https://github.com/ARITOSSS/Aristide-Project/blob/main/Codes/dssp_solver.py) begins by selecting a random cell and placing it in `Set S` (Certain Cells). Upon launching the algorithm, if `S` is not empty, it reveals the cell. It then checks for `AFN` (Adjacent Flagged Neighbors) to identify safe cells, which are added to `S`, while uncertain cells are placed in `Set Q` (Uncertain Cells). The algorithm then iterates through `Q`, using the information gathered from `S` to determine if it can safely reclassify certain cells or place flags using `iSAMN`. This process repeats in a loop until the game is either lost or won. If at any point `S` becomes empty, the algorithm will randomly select a cell to reveal.
 
 ## **Time and Space Complexities :**
 
@@ -24,98 +17,52 @@ It performs a similar function to the NSP solver but with enhanced logic for han
 
 #### **Time Complexity :**
 
-Grid Initialization: 
-
-O(n), where n is the number of cells. This involves placing bombs randomly and setting up the game grid.
-
-Revealing a Cell: For each cell, the number of adjacent cells to check is constant (8 neighbors), leading to an O(1) operation per cell reveal. However, revealing all safe cells can cascade and potentially reveal large sections of the board, making it 
-
-O(n) in the worst case.
-
-Flagging a Cell: Flagging or unflagging a cell takes constant time, 
-
-O(1).
+- **Grid Initialization:** O(n), where n is the number of cells. This involves placing bombs randomly and setting up the game grid.
+- **Revealing a Cell:** For each cell, the number of adjacent cells to check is constant (8 neighbors), leading to an O(1) operation per cell reveal. However, revealing all safe cells can cascade and potentially reveal large sections of the board, making it O(n) in the worst case.
+- **Flagging a Cell:** Flagging or unflagging a cell takes constant time, O(1).
 
 #### **Space Complexity :**
 
-The game requires space to store the grid, bomb locations, revealed cells, and flags, leading to a space complexity of 
-O(n), where n is the number of cells. 
+The game requires space to store the grid, bomb locations, revealed cells, and flags, leading to a space complexity of O(n), where n is the number of cells.
 
-### **Naive Single Point (NSP) Solver : **
+### **Double Set Single Point (DSSP) Solver :**
 
 #### **Time Complexity :**
 
-Modify here
+The time complexity of the DSSP solver is O(n²) due to the need to process potentially multiple interactions between uncertain cells. As the algorithm iterates over the grid, it checks relationships and counts for uncertain cells, leading to an increased number of operations.
 
 #### **Space Complexity :**
 
-The solver maintains sets for cells to probe and flags, contributing to a space complexity of O(n).
+DSSP maintains two sets (S and Q) for certain and uncertain cells, contributing to a space complexity of O(n). This remains efficient as it only stores references to cells rather than duplicating data.
 
+### **Performance and Big O Analysis Comparison :**
 
-### **Double Set Single Point (DSSP) Solver :**
-
-#### **Time Complexity : **
-
-Modify here
-
-#### **Space Complexity :**
-DSSP also maintains two sets (S and Q), which increases space usage slightly, but the overall complexity is still O(n).
-
-
-### **Performance and Big O Analysis Comparison : ** 
-NSP vs. DSSP:
-Both solvers operate with (Modify here with complexity) time complexity, but the DSSP algorithm has more intricate logic for handling uncertain cells. This added complexity improves decision-making but increases the overhead in each step, resulting in a higher constant factor in practice.
-DSSP is more effective in complex board setups, as it is capable of handling uncertainty better by using two sets (S and Q). This makes it more likely to win difficult games compared to NSP, which is purely naive in its approach.
-
+The DSSP algorithm has a time complexity of O(n²), which is higher than the linear complexity of the game logic. However, this added complexity allows DSSP to make more informed decisions regarding uncertain cells, ultimately leading to a higher success rate in solving challenging board setups compared to naive approaches.
 
 ## **Potential Shortcomings and Suggested Improvements :**
 
-### **Minesweeper Game Logic :**
+### Double Set Single Point (DSSP) Solver :**
 
-#### **Shortcomings :**
+#### **Notes:**
 
-Do this last week
+- The DSSP algorithm can still fail in very complex scenarios where uncertain cells create complex dependencies, which can lead to incorrect inferences.
+- Increasing time complexity could lead to slower performance on larger grids.
 
-#### **Improvements :**
+#### **Improvements:**
 
-Do this last week
-
-
-### **Naive Single Point (NSP) Solver :**
-
-#### **Shortcomings :**
-
-Do this last week
-
-#### **Improvements :**
-
-Do this last week
-
-### **Double Set Single Point (DSSP) Solver :**
-
-#### **Shortcomings :**
-
-Do this last week
-
-#### **Improvements :**
-
-Do this last week
+- Introduce a heuristic to prioritise the probing of cells based on certain criteria (for example, proximity to reported bombs or a high number of adjacent unknown cells). In particular, by seeing the deminer as a constraint satisfaction problem.
 
 ## **Use of Extensive Language Models (ChatGPT, etc.) :**
 
 ChatGPT and DeepL are the only external tools I have used for various reasons:
-- For reports and documentation, I always act in the same way: first I write a base in French, which I have corrected by chatGpt and which I then translate into English with Deepl.
-- I generate the docstrings with ChatGpt and then modify them in my own way.
-- Otherwise I use ChatGpt when I'm having trouble understanding something I don't know, such as the use of graphical interfaces, pylint, unittest or even certain errors. Beyond that, I avoid using code generated via ChatGpt because I have the impression that it more often ends up causing problems than anything else, but I draw inspiration from it.
-
+- For reports and documentation, I always act in the same way: first, I write a base in French, which I have corrected by ChatGPT and which I then translate into English with DeepL.
+- I generate the docstrings with ChatGPT and then modify them in my own way.
+- I use ChatGPT when I'm having trouble understanding something I don't know, such as the use of graphical interfaces, pylint, unittest, or even certain errors. Beyond that, I avoid using code generated via ChatGPT because I have the impression that it more often ends up causing problems than anything else, but I draw inspiration from it.
 
 ## **References :**
-https://dash.harvard.edu/handle/1/14398552
 
-https://docs.python.org/3/library/tkinter.html
-
-https://gamedevacademy.org/pylint-tutorial-complete-guide/
-
-https://www.pythontutorial.net/python-unit-testing/python-unittest-coverage/
-
-https://caml.inria.fr/pub/docs/oreilly-book/html/book-ora059.html#:~:text=At%20the%20beginning%20of%20the,up%20and%20the%20player%20loses.
+- [Harvard DASH](https://dash.harvard.edu/handle/1/14398552)
+- [Tkinter Documentation](https://docs.python.org/3/library/tkinter.html)
+- [Pylint Tutorial](https://gamedevacademy.org/pylint-tutorial-complete-guide/)
+- [Python Unittest Coverage](https://www.pythontutorial.net/python-unit-testing/python-unittest-coverage/)
+- [Caml Documentation](https://caml.inria.fr/pub/docs/oreilly-book/html/book-ora059.html#:~:text=At%20the%20beginning%20of%20the,up%20and%20the%20player%20loses.)
