@@ -55,7 +55,7 @@ coverage report -m
 
 --- 
 
-## DSSP Statistics :
+## **DSSP Statistics:**
 
 The algorithm played a total of 10,000 games for each difficulty level in the first two scenarios. It's important to note that games starting on a bomb were excluded from these counts, as such occurrences do not accurately reflect the solver's capabilities. In the third scenario, the algorithm played 1,000 games for each level of mine density. This testing approach ensures a robust evaluation of the solver's effectiveness in different game situations.
 

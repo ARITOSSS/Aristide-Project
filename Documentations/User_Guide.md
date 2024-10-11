@@ -27,7 +27,7 @@ pylint .\dssp_solver.py .\test_dssp_solver.py .\test_minesweeper.py .\statistics
 ```
 
 #### **Most important file is [statistics.py](https://github.com/ARITOSSS/Aristide-Project/blob/main/Codes/statistics.py) :**
-This file is the most important, because what's interesting for my project is to see the results obtained by the algorithm on several deminer difficulties. The main file is just for fun, so you can see how each iteration of the algorithm performs. This file wrote the result in [Testing_Document](https://github.com/ARITOSSS/Aristide-Project/blob/main/Documentations/Testing_Document.md).
+This file is the most important, because what's interesting for my project is to see the results obtained by the algorithm on several deminer difficulties. The main file is just for fun, so you can see how each iteration of the algorithm performs. This file wrote the result in [DSSP Statistics](Testing_Document.md#dssp-statistics)
 
 ---
 
