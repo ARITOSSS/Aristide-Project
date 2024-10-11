@@ -20,15 +20,7 @@ pip install unittest numpy matplotlib tkinter coverage pylint
 ```bash
 python main.py
 ```
-#### **Running Tests with Coverage :**
-- First execute the tests :
-```bash
-python -m coverage run -m unittest
-```
-- To Generate the report, run :
-```bash
-coverage report -m
-```
+
 #### **See how clean the code is :**
 ```bash
 pylint .\dssp_solver.py .\test_dssp_solver.py .\test_minesweeper.py .\statistics.py .\main.py .\minesweeper.py

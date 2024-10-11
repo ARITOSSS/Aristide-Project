@@ -1,15 +1,65 @@
 # The Testing Document
 
-## Coverage Report
+---
 
-![Mine Density vs Win Percentage](./Codes/Images/mine_density_vs_win_percentage.png)
+## **Coverage Report**
+
+### Coverage of the tests :
+![Coverage of the tests](../Codes/Images/test_coverage.png)
+
+The code has 100% coverage, it only loses percentages on methods linked to the user interface and with the main in the tests.
+
+---
+
+## What Has Been Tested and How?
+
+### Tests Conducted:
+
+1. **MinesweeperSolverDSSP**
+   - Random selection of unrevealed and unflagged cells.
+   - Checking conditions for "All Free Neighbor" and "All Marked Neighbor."
+   - Solving the game with a predefined state to verify if the solver can win.
+   - Handling scenarios where no steps are available.
+   - Running games and checking the win rate.
+
+2. **MinesweeperGame**
+   - Generation of bomb locations.
+   - Counting adjacent bombs accurately.
+   - Correct identification of neighboring cells.
+   - Revealing cells and placing/removing flags.
+   - Winning conditions and game-over events.
+
+
+### Method of Testing :
+- Each test case uses assertions to validate expected outcomes against actual results.
 
 
 
+### What kind of inputs were used for the testing ?
 
+The tests for the Minesweeper game do not utilize inputs in the conventional sense. Instead, as seen in the implementation, each test function relies on a `MinesweeperGame` or `MinesweeperSolverDSSP` instance that is set up as an attribute during the `setUp` method. This instance is created with specific parameters (rows, columns, and bomb count) but does not require individual inputs for each test. Therefore, the tests operate directly on the state of the `MinesweeperGame` or the solver, allowing for focused validation of their functionalities without external inputs.
 
+---
 
-### DSSP Results: Starting with a Random Cell
+#### **Running Tests with Coverage :**
+Place yourself in .\Codes repository and :
+
+- First execute the tests :
+```bash
+python -m coverage run -m unittest
+```
+- To Generate the report, run :
+```bash
+coverage report -m
+```
+
+--- 
+
+## DSSP Statistics :
+
+The algorithm played a total of 10,000 games for each difficulty level in the first two scenarios. It's important to note that games starting on a bomb were excluded from these counts, as such occurrences do not accurately reflect the solver's capabilities. In the third scenario, the algorithm played 1,000 games for each level of mine density. This testing approach ensures a robust evaluation of the solver's effectiveness in different game situations.
+
+### DSSP Results: Starting with a Random Cell :
 #### Beginner Level
 - Win percentage for each batch: [67.56152125279642, 69.12599318955732, 68.29545454545455, 69.4760820045558, 67.95454545454545, 68.8430698739977, 68.24858757062147, 66.85845799769851, 69.18735891647856, 66.20370370370371]
 - Global win percentage of DSSP: 68.18%
@@ -46,4 +96,4 @@
 - Mine Density: 0.31, Win Percentage: 0.29%
 - Mine Density: 0.37, Win Percentage: 0.00%
 
-![Mine Density vs Win Percentage](./Codes/Image/mine_density_vs_win_percentage.png)
+![Mine Density vs Win Percentage](../Codes/Images/mine_density_vs_win_percentage.png)
