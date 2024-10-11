@@ -81,7 +81,7 @@ class TestMinesweeperSolverDSSP(unittest.TestCase):
         solver.s = set()
 
         # Limit the number of steps in step_solve to simulate an interruption
-        solver.step_solve(max_steps=0)
+        solver.step_solve(max_steps=1)
 
         # Ensure set 's' is not empty after selecting a new cell
         self.assertNotEqual(

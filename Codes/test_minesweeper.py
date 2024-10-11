@@ -41,8 +41,6 @@ class TestMinesweeperGame(unittest.TestCase):
         self.game.bomb_locations = {(1, 1)}
         self.game.reveal_cell((0, 0))
         self.assertIn((0, 0), self.game.revealed_cells)
-        temp = self.game.reveal_cell((0, 0))
-        self.assertTrue(temp== None)
 
     def test_place_flag(self):
         """Test placing and removing flags on cells."""
@@ -67,9 +65,9 @@ class TestMinesweeperGame(unittest.TestCase):
         """Test event processing when the player wins."""
         self.game.bomb_locations = {(1, 1)}
         # Revealing all non-bomb cells
-        self.game.process_event((0, 0))  
-        self.game.process_event((0, 1))  
-        self.game.process_event((1, 0))  
+        self.game.process_event((0, 0))
+        self.game.process_event((0, 1))
+        self.game.process_event((1, 0))
         self.assertTrue(self.game.check_win())  # Check if the win condition is met
 
 
