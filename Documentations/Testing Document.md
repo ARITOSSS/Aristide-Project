@@ -41,7 +41,7 @@ The tests for the Minesweeper game do not utilize inputs in the conventional sen
 
 ---
 
-#### **Running Tests with Coverage :**
+## **Running Tests with Coverage :**
 Place yourself in .\Codes repository and :
 
 - First execute the tests :
