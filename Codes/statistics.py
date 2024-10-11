@@ -59,7 +59,7 @@ def main2():
     wins_list_expert = []
 
     # Open a markdown file to store results
-    with open("Testing Document.md", "a", encoding="utf-8") as f:  # Use 'a' to append to the file
+    with open("Testing_Document.md", "a", encoding="utf-8") as f:  # Use 'a' to append to the file
         f.write("### DSSP Results: Starting with a Corner Cell\n")
 
         # Run 10,000 games for each difficulty level
@@ -99,7 +99,7 @@ def main3():
     wins_list_density = []
     mine_densities = []
 
-    with open("Testing Document.md", "a", encoding="utf-8") as f:
+    with open("Testing_Document.md", "a", encoding="utf-8") as f:
         f.write("### Win Percentage vs. Mine Density on a 9x9 grid\n")
 
         for mines in range(0, 33, 5):  # Increase the number of mines by steps of 5, up to 32 mines
