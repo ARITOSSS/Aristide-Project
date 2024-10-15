@@ -32,8 +32,7 @@ class MinesweeperSolverDSSP:
 
     def select_random(self):
         """
-        Select a corner cell if available; otherwise, select a random unrevealed 
-        and unflagged cell.
+        Select a random unrevealed and unflagged cell.
 
         Returns:
             tuple: The selected cell (row, col) or None if no valid cell exists.
