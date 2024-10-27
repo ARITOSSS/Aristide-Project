@@ -10,7 +10,7 @@ The solver work by simulating a Minesweeper game, probing cells, and marking pot
 ## **Features :**
 
 - **Minesweeper Game**: A fully functional Minesweeper game engine supporting different grid sizes and bomb configurations.
-- **DSSP Algorithm**: A more sophisticated solver that improves the chances of solving the game by reducing unnecessary probes.
+- **DSSP Algorithm**: Solver.
 - **Unittest Support**: Comprehensive test cases for the game and solvers.
 - **Pylint Support**: Ensures the code follows best practices in terms of structure, style, and quality.
 
