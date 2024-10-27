@@ -211,3 +211,9 @@ class MinesweeperGame:
             if location not in bomb_locations:
                 bomb_locations.add(location)
         return list(bomb_locations)
+
+
+
+if __name__ == "__main__":
+    game = MinesweeperGame(9, 9, 10)
+    game.start_game()

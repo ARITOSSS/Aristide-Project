@@ -3,7 +3,7 @@
 ## **Overview :**
 
 My project implements a Minesweeper game solver :
-- **Double Set Single Point (DSSP) Algorithm**: A more advanced algorithm that maintains two sets: one for certain cells and one for insecure cells, allowing more efficient flagging and probing.
+- **Double Set Single Point (DSSP) Algorithm**: Algorithm that maintains two sets: one for certain cells and one for insecure cells, allowing more efficient flagging and probing.
 
 The solver work by simulating a Minesweeper game, probing cells, and marking potential bombs until the game is won or lost.
 

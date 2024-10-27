@@ -18,7 +18,7 @@ class MinesweeperSolverDSSP:
         q (set): Set of insecure cells.
         opener: First Move.
     """
-
+    
     def __init__(self, game: MinesweeperGame):
         """
         Initialize the solver with a game instance and set default values.
